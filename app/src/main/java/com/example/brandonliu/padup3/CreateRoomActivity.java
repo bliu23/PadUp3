@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,8 +22,8 @@ import java.util.ArrayList;
 public class CreateRoomActivity extends AppCompatActivity {
 
     private Document htmlDoc;
-//    private String htmlURL = "http://puzzledragonx.com/en/multiplayer-dungeons.asp";
-    private String htmlURL = "http://google.com";
+    private String htmlURL = "http://puzzledragonx.com/en/multiplayer-dungeons.asp";
+//    private String htmlURL = "http://google.com";
     private TextView parsedHTMLNode;
     private String htmlContentString;
 
@@ -73,7 +75,54 @@ public class CreateRoomActivity extends AppCompatActivity {
             try {
                 htmlDoc = Jsoup.connect(htmlURL).get();
                 htmlContentString = htmlDoc.title();
-                Log.d("test", htmlContentString);
+
+                /*
+                //This section of code is able to grab all of the dungeons we need (plus Home, which we can remove)
+                //However, we cannot efficiently divide it.
+                Elements links = htmlDoc.select("a[href]");
+
+                Log.d("test", "\nLinks: " + String.valueOf(links.size()));
+                for (Element link : links) {
+                    Log.d("test", link.text());
+                    if(link.text().equals("Home")) {
+                        Log.d("test", "equals");
+                        break;
+                    }
+                }*/
+                Elements test = htmlDoc.select("table#tabledrop");
+                for(Element row:test.select("tr")) {
+                    Log.d("test", row.text());
+                }
+
+//                StringBuilder table = new StringBuilder();
+//                table.append(test.text());
+//                //Category
+//                //Dungeon
+//                for(int i = 0; i < table.length(); i++) {
+//                    String temp = "";
+//
+//                }
+/* cases to skip:
+*   After category, can skip X amount of spaces. Category ends when we hit STA.
+*   After each dungeon we can skip X amount of spaces too.
+* */
+
+
+//                for (Element link : test) {
+//                    Log.d("test", link.text());
+//                    if (link.text().equals("Home")) {
+//                        Log.d("test", "equals");
+//                        break;
+//                    }
+//                }
+
+
+
+
+//                Log.d("test", dungeonNames.text());
+//                for(Element link:dungeonNames)
+//                    Log.d("test", dungeonNames.text());
+                Log.d("test", "HTML CONTENT STRING " + htmlContentString);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -82,10 +131,8 @@ public class CreateRoomActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            Log.d("test", "did we get here");
             //parsedHTMLNode.setText(htmlContentString);
             Log.d("test", "htmlContentString \n" + htmlContentString);
-            Log.d("test", "but we didn't get here?");
         }
     }
 }
