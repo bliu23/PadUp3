@@ -24,13 +24,16 @@ public class CreateRoomActivity extends AppCompatActivity {
     private Document htmlDoc;
     private String htmlURL = "http://puzzledragonx.com/en/multiplayer-dungeons.asp";
 //    private String htmlURL = "http://google.com";
-    private TextView parsedHTMLNode;
     private String htmlContentString;
+    private ArrayList<Category> categories;
+    private ArrayList<String> content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room);
+
+        content = new ArrayList<String>();
 
         JsoupAsyncTask task = new JsoupAsyncTask();
         task.execute();
@@ -89,19 +92,35 @@ public class CreateRoomActivity extends AppCompatActivity {
                         break;
                     }
                 }*/
+
                 Elements test = htmlDoc.select("table#tabledrop");
+                boolean categorySet = true;
+
                 for(Element row:test.select("tr")) {
-                    Log.d("test", row.text());
+                    content.add(row.text());
+                }
+                for(int i = 0; i < content.size(); i++) {
+                    String temp = content.get(i);
+                    int len = temp.length();
+                    if(temp.equals("STA BTL Coin Exp G/S E/S")) {
+                        continue;
+                    }
+                    if(temp.equals("Remarks")) {
+                        Log.d("end", temp);
+                        break;
+                    }
+                    if(temp.length() >= 17 && temp.substring(0, 17).equals("Challenge Dungeon")) {
+                        Log.d("parsechallenge", temp);
+                    }
+                    else if(temp.charAt(len-1) == '-' && temp.charAt(len-2) == '-')
+                        Log.d("parsetest--", temp);
+
+                    else if(Character.isDigit(temp.charAt(len-1)) && Character.isDigit(temp.charAt(len-2)))
+                        Log.d("parsetestdigit", temp);
+                    else
+                        Log.d("parsetestcat", content.get(i));
                 }
 
-//                StringBuilder table = new StringBuilder();
-//                table.append(test.text());
-//                //Category
-//                //Dungeon
-//                for(int i = 0; i < table.length(); i++) {
-//                    String temp = "";
-//
-//                }
 /* cases to skip:
 *   After category, can skip X amount of spaces. Category ends when we hit STA.
 *   After each dungeon we can skip X amount of spaces too.
