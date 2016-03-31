@@ -13,8 +13,8 @@ public class SelectDungeon extends AppCompatActivity {
         setContentView(R.layout.activity_select_dungeon);
         Intent intent = getIntent();
         //int intValue = intent.getIntExtra("dungeonCatID", 0);
-        String stringValue = intent.getExtras().getString("dungeonCatID");
-//        Log.d("test intent", String.valueOf(intValue));
-        Log.d("test intent", stringValue);
+        Category receivedCat = intent.getExtras().getParcelable("cat");
+        //receivedCat.print();
+
     }
 }

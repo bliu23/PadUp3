@@ -23,10 +23,9 @@ public class CreateRoomActivity extends AppCompatActivity {
 
     private Document htmlDoc;
     private String htmlURL = "http://puzzledragonx.com/en/multiplayer-dungeons.asp";
-    private String htmlContentString;
-    private ArrayList<Category> dungeonList;
-    private ArrayList<String> categoryList;
-    private ArrayAdapter<String> adapter;
+    private ArrayList<Category> dungeonList;    //used to hold all of our categories and respective dungeons
+    private ArrayList<String> categoryList;     //used for our listview
+    private ArrayAdapter<String> adapter;       //adapter for listview
     private ListView listView;
 
     @Override
@@ -34,10 +33,13 @@ public class CreateRoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room);
 
-        categoryList = new ArrayList<String>();
+        categoryList = new ArrayList<String>();             //category list is the list of categories that we use in our listview
         listView = (ListView)findViewById(R.id.listView);
+        //new task
         JsoupAsyncTask task = new JsoupAsyncTask();
+        //execute task
         task.execute();
+        //create adapter with these parameters; will be set on postExecution
         adapter = new ArrayAdapter<String>(this, R.layout.list_layout, categoryList);
     }
 
@@ -52,17 +54,21 @@ public class CreateRoomActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
+                //grab htmldoc
                 htmlDoc = Jsoup.connect(htmlURL).get();
-                htmlContentString = htmlDoc.title();
 
+                //grab all elements in the table. Includes category, dungeon, and a few misc lines.
                 Elements test = htmlDoc.select("table#tabledrop");
+                //initialize dungeon list
                 dungeonList = new ArrayList<Category>();
+                //start at negative 1. Note, we always start at a new category.
                 int counter = -1;
+                //iterates through elements and parses according to category or dungeon.
                 for(Element row : test.select("tr")) {
                     Log.d("test", "1");
                     String temp = row.text();
                     int len = temp.length();
-                    //special case, skip this.
+                    //special case, we want to skip this line.
                     if(temp.equals("STA BTL Coin Exp G/S E/S")) {
                         continue;
                     }
@@ -81,11 +87,13 @@ public class CreateRoomActivity extends AppCompatActivity {
                     // -- at end indicates dungeon
                     else if(temp.charAt(len-1) == '-' && temp.charAt(len-2) == '-') {
                         //Log.d("parsetest--", temp);
+                        temp = stripString(temp);
                         dungeonList.get(counter).addDungeon(temp);
                     }
                     // digits at end indicates dungeon
                     else if(Character.isDigit(temp.charAt(len-1)) && Character.isDigit(temp.charAt(len-2))) {
                         //Log.d("parsetestdigit", temp);
+                        temp = stripString(temp);
                         dungeonList.get(counter).addDungeon(temp);
                     }
                     // empty indicates category
@@ -102,9 +110,6 @@ public class CreateRoomActivity extends AppCompatActivity {
                     temp.print();
 
                 }
-
-
-                Log.d("test", "HTML CONTENT STRING " + htmlContentString);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -113,20 +118,37 @@ public class CreateRoomActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            //parsedHTMLNode.setText(htmlContentString);
-            Log.d("test", "htmlContentString \n" + htmlContentString);
             listView.setAdapter(adapter);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView parent, View v, int position, long id) {
                     // Start your Activity according to the item just clicked.
-                    Log.d("test", "yes!");
                     Intent intent = new Intent(CreateRoomActivity.this, SelectDungeon.class);
                     //intent.putExtra("dungeonCatID", position);
-                    intent.putExtra("dungeonCatID", "sending string");
+                    intent.putExtra("cat", dungeonList.get(position));
                     startActivity(intent);
                 }
             });
+        }
+
+        /**
+         * This function strips the string of all (6) trailing dashes and numbers which correspond
+         * to the stamina, floors, coins, etc.
+         */
+        private String stripString(String str) {
+            String temp = "";
+            int spaceCounter = 0;
+            int i;
+            for(i = str.length()-1; i >= 0; i--) {
+                if(str.charAt(i) == ' ') {
+                    spaceCounter++;
+                }
+                if(spaceCounter == 6) {
+                    break;
+                }
+            }
+            temp = str.substring(0, i);
+            return temp;
         }
     }
 }
