@@ -23,47 +23,22 @@ public class CreateRoomActivity extends AppCompatActivity {
 
     private Document htmlDoc;
     private String htmlURL = "http://puzzledragonx.com/en/multiplayer-dungeons.asp";
-//    private String htmlURL = "http://google.com";
     private String htmlContentString;
-    private ArrayList<Category> categories;
-    private ArrayList<String> content;
+    private ArrayList<Category> dungeonList;
+    private ArrayList<String> categoryList;
+    private ArrayAdapter<String> adapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room);
 
-        content = new ArrayList<String>();
-
+        categoryList = new ArrayList<String>();
+        listView = (ListView)findViewById(R.id.listView);
         JsoupAsyncTask task = new JsoupAsyncTask();
         task.execute();
-        ListView listView = (ListView)findViewById(R.id.listView);
-        ArrayList<String> test = new ArrayList<String>();
-
-        test.add("numero1");
-        test.add("number 2");
-        test.add("number 3");
-        test.add("number 4");
-        test.add("number 5");
-        test.add("number 6");
-        test.add("number 7");
-        test.add("number 8");
-        test.add("number 9");
-        test.add("number 10");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_layout, test);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView parent, View v, int position, long id) {
-                // Start your Activity according to the item just clicked.
-                Log.d("test", "yes!");
-                Intent intent = new Intent(CreateRoomActivity.this, SelectDungeon.class);
-                //intent.putExtra("dungeonCatID", position);
-                intent.putExtra("dungeonCatID", "sending string");
-                startActivity(intent);
-            }
-        });
+        adapter = new ArrayAdapter<String>(this, R.layout.list_layout, categoryList);
     }
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -71,6 +46,7 @@ public class CreateRoomActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Log.d("preexecute", "test");
         }
 
         @Override
@@ -79,68 +55,55 @@ public class CreateRoomActivity extends AppCompatActivity {
                 htmlDoc = Jsoup.connect(htmlURL).get();
                 htmlContentString = htmlDoc.title();
 
-                /*
-                //This section of code is able to grab all of the dungeons we need (plus Home, which we can remove)
-                //However, we cannot efficiently divide it.
-                Elements links = htmlDoc.select("a[href]");
-
-                Log.d("test", "\nLinks: " + String.valueOf(links.size()));
-                for (Element link : links) {
-                    Log.d("test", link.text());
-                    if(link.text().equals("Home")) {
-                        Log.d("test", "equals");
-                        break;
-                    }
-                }*/
-
                 Elements test = htmlDoc.select("table#tabledrop");
-                boolean categorySet = true;
-
-                for(Element row:test.select("tr")) {
-                    content.add(row.text());
-                }
-                for(int i = 0; i < content.size(); i++) {
-                    String temp = content.get(i);
+                dungeonList = new ArrayList<Category>();
+                int counter = -1;
+                for(Element row : test.select("tr")) {
+                    Log.d("test", "1");
+                    String temp = row.text();
                     int len = temp.length();
+                    //special case, skip this.
                     if(temp.equals("STA BTL Coin Exp G/S E/S")) {
                         continue;
                     }
+                    //hit the end. break
                     if(temp.equals("Remarks")) {
                         Log.d("end", temp);
                         break;
                     }
+                    //special case for challenge dungeon since it ends with numbers.
                     if(temp.length() >= 17 && temp.substring(0, 17).equals("Challenge Dungeon")) {
-                        Log.d("parsechallenge", temp);
+                        //Log.d("parsechallenge", temp);
+                        categoryList.add(temp);
+                        dungeonList.add(new Category(temp));
+                        counter++;
                     }
-                    else if(temp.charAt(len-1) == '-' && temp.charAt(len-2) == '-')
-                        Log.d("parsetest--", temp);
-
-                    else if(Character.isDigit(temp.charAt(len-1)) && Character.isDigit(temp.charAt(len-2)))
-                        Log.d("parsetestdigit", temp);
-                    else
-                        Log.d("parsetestcat", content.get(i));
+                    // -- at end indicates dungeon
+                    else if(temp.charAt(len-1) == '-' && temp.charAt(len-2) == '-') {
+                        //Log.d("parsetest--", temp);
+                        dungeonList.get(counter).addDungeon(temp);
+                    }
+                    // digits at end indicates dungeon
+                    else if(Character.isDigit(temp.charAt(len-1)) && Character.isDigit(temp.charAt(len-2))) {
+                        //Log.d("parsetestdigit", temp);
+                        dungeonList.get(counter).addDungeon(temp);
+                    }
+                    // empty indicates category
+                    else {
+                        categoryList.add(temp);
+                        dungeonList.add(new Category(temp));
+                        counter++;
+                    }
                 }
 
-/* cases to skip:
-*   After category, can skip X amount of spaces. Category ends when we hit STA.
-*   After each dungeon we can skip X amount of spaces too.
-* */
+                for(int i = 0; i < dungeonList.size(); i++) {
+                    Category temp = dungeonList.get(i);
+                    Log.d("dungeoncategories", temp.getCat());
+                    temp.print();
+
+                }
 
 
-//                for (Element link : test) {
-//                    Log.d("test", link.text());
-//                    if (link.text().equals("Home")) {
-//                        Log.d("test", "equals");
-//                        break;
-//                    }
-//                }
-
-
-
-
-//                Log.d("test", dungeonNames.text());
-//                for(Element link:dungeonNames)
-//                    Log.d("test", dungeonNames.text());
                 Log.d("test", "HTML CONTENT STRING " + htmlContentString);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -152,6 +115,18 @@ public class CreateRoomActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             //parsedHTMLNode.setText(htmlContentString);
             Log.d("test", "htmlContentString \n" + htmlContentString);
+            listView.setAdapter(adapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView parent, View v, int position, long id) {
+                    // Start your Activity according to the item just clicked.
+                    Log.d("test", "yes!");
+                    Intent intent = new Intent(CreateRoomActivity.this, SelectDungeon.class);
+                    //intent.putExtra("dungeonCatID", position);
+                    intent.putExtra("dungeonCatID", "sending string");
+                    startActivity(intent);
+                }
+            });
         }
     }
 }
