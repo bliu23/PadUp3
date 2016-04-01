@@ -13,7 +13,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/joincreate_button"
+        android:background="@drawable/button_style"
         android:text="Host a Room"
         android:id="@+id/createbutton"
         android:layout_above="@+id/joinbutton"
@@ -23,7 +23,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/joincreate_button"
+        android:background="@drawable/button_style"
         android:text="Join a Room"
         android:id="@+id/joinbutton"
         android:layout_centerVertical="true"
