@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">PadUp3</string>
     <string name="roomId">Enter Room ID</string>
+    <string name="leaderName">Leader</string>
+    <string name="subName">Sub</string>
+    <string name="requestedLeaderName">Requested Leader</string>
+    <string name="placeRequest">Place Request!</string>
 </resources>

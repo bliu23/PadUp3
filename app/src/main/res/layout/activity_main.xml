@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#FFFBC7"
+    android:background="@color/backgroundColor"
     tools:context="com.example.brandonliu.padup.MainActivity">
 
     <Button
@@ -16,6 +16,7 @@
         android:background="@drawable/button_style"
         android:text="Host a Room"
         android:id="@+id/createbutton"
+        android:textColor="@color/textColor"
         android:layout_above="@+id/joinbutton"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="76dp" />
@@ -26,6 +27,7 @@
         android:background="@drawable/button_style"
         android:text="Join a Room"
         android:id="@+id/joinbutton"
+        android:textColor="@color/textColor"
         android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/createbutton"
         android:layout_alignStart="@+id/createbutton" />

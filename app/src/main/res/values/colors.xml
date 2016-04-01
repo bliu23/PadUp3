@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="textColor">#FFFFFF</color>
+    <color name="textHintColor">#D9D9D9</color>
+    <color name="backgroundColor">#FFFBC7</color>
+    <color name="leaderTextField">#D2A679</color>
+    <color name="subTextField">#D2A679</color>
 </resources>

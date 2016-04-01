@@ -7,17 +7,117 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/backgroundColor"
     tools:context="com.example.brandonliu.padup3.CreateRoomActivity">
 
     <EditText
-        android:layout_width="120dp"
+        android:id="@+id/roomId"
+        android:layout_width="128dp"
         android:layout_height="wrap_content"
-        android:inputType="number"
+        android:inputType="phone"
         android:ems="14"
-        android:id="@+id/editText"
-        android:layout_marginTop="88dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:maxLength="@integer/maxchars"
+        android:layout_marginTop="62dp"
+        android:background="@drawable/button_style"
+        android:textColor="@color/textColor"
         android:hint="@string/roomId"
-        android:gravity="center_horizontal"></EditText>
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+    </EditText>
+
+    <EditText
+        android:id="@+id/leaderText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:background="@drawable/leader_button_style"
+        android:layout_marginTop="16dp"
+        android:singleLine="true"
+        android:hint="@string/leaderName"
+        android:textColor="@color/textColor"
+        android:layout_below="@+id/roomId"
+        android:layout_alignLeft="@+id/sub1"
+        android:layout_alignStart="@+id/sub1" />
+
+    <EditText
+        android:id="@+id/sub1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:background="@drawable/sub_button_style"
+        android:singleLine="true"
+        android:textColor="@color/textColor"
+        android:hint="@string/subName"
+        android:layout_below="@+id/leaderText"
+        android:layout_marginTop="6dp"
+        android:layout_alignLeft="@+id/sub2"
+        android:layout_alignStart="@+id/sub2" />
+
+    <EditText
+        android:id="@+id/sub2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:background="@drawable/sub_button_style"
+        android:singleLine="true"
+        android:textColor="@color/textColor"
+        android:hint="@string/subName"
+        android:layout_marginTop="6dp"
+        android:layout_below="@+id/sub1"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/sub3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:background="@drawable/sub_button_style"
+        android:singleLine="true"
+        android:textColor="@color/textColor"
+        android:hint="@string/subName"
+        android:layout_marginTop="6dp"
+        android:layout_below="@+id/sub2"
+        android:layout_alignLeft="@+id/sub2"
+        android:layout_alignStart="@+id/sub2" />
+
+    <EditText
+        android:id="@+id/sub4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:background="@drawable/sub_button_style"
+        android:singleLine="true"
+        android:textColor="@color/textColor"
+        android:hint="@string/subName"
+        android:layout_below="@+id/sub3"
+        android:layout_alignLeft="@+id/sub3"
+        android:layout_alignStart="@+id/sub3"
+        android:layout_marginTop="6dp" />
+
+    <EditText
+        android:id="@+id/friendLeaderText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:background="@drawable/leader_button_style"
+        android:singleLine="true"
+        android:hint="@string/requestedLeaderName"
+        android:textColor="@color/textColor"
+        android:layout_below="@+id/sub4"
+        android:layout_alignLeft="@+id/sub4"
+        android:layout_alignStart="@+id/sub4"
+        android:layout_marginTop="6dp"/>
+
+    <Button
+        android:layout_width="128dp"
+        android:layout_height="36dp"
+        android:background="@drawable/button_style"
+        android:text="@string/placeRequest"
+        android:textColor="@color/textColor"
+        android:id="@+id/requestButton"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/friendLeaderText"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
