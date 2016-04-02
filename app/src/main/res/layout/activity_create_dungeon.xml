@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:background="#FFFBC7"
         android:id="@+id/listView"
-        android:divider="#FFFBC7"
+        android:divider="@color/backgroundColor"
         android:dividerHeight="10.0sp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"

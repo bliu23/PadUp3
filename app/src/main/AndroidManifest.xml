@@ -19,9 +19,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateCategoryActivity" />
-        <activity android:name=".JoinRoomActivity" />
+        <activity android:name=".FindCategoryActivity" />
         <activity android:name=".CreateDungeonActivity" />
-        <activity android:name=".CreateRoomActivity"></activity>
+        <activity android:name=".CreateRoomActivity" />
+        <activity android:name=".FindDungeonActivity"></activity>
     </application>
 
 </manifest>

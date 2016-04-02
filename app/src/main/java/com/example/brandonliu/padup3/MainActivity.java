@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, JoinRoomActivity.class);
+                Intent intent = new Intent(MainActivity.this, FindCategoryActivity.class);
                 startActivity(intent);
             }
         });

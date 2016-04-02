@@ -10,4 +10,12 @@
     android:background="#FFFBC7"
     tools:context="com.example.brandonliu.padup.JoinRoomActivity">
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:divider="@color/backgroundColor"
+        android:dividerHeight="10.0sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

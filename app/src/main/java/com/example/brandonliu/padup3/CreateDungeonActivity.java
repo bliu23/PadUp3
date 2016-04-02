@@ -34,6 +34,8 @@ public class CreateDungeonActivity extends AppCompatActivity {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
                 String dungeonClicked = dungeons.get(position);
                 Intent intent = new Intent(CreateDungeonActivity.this, CreateRoomActivity.class);
+                intent.putExtra("dungeon", dungeonClicked);
+                intent.putExtra("category", receivedCategory.getCat());
                 startActivity(intent);
             }
         });
