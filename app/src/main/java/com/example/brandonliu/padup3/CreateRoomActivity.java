@@ -1,17 +1,28 @@
 package com.example.brandonliu.padup3;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class CreateRoomActivity extends AppCompatActivity {
 
@@ -21,17 +32,20 @@ public class CreateRoomActivity extends AppCompatActivity {
     private String dungeon;
     private String category;
 
+    private String htmlURL = "http://www.puzzledragonx.com/en/monsterbook.asp";
+    private ArrayList<String> monsters;
+    private Document htmlDoc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room);
         dungeon = getIntent().getStringExtra("dungeon");
         category = getIntent().getStringExtra("category");
-        Log.d("dungeon", dungeon);
-        Log.d("category", category);
         button = (Button)findViewById(R.id.requestButton);
         editRoomId = (EditText)findViewById(R.id.roomId);
         editMonsters = new EditText[6];
+        //set edit text fields.
         for(int i = 0; i < 6; i++) {
             editMonsters[i] = (EditText)findViewById(R.id.leaderText + i);
         }
@@ -47,6 +61,10 @@ public class CreateRoomActivity extends AppCompatActivity {
                 }
             }
         });
+
+        JsoupAsyncTask task = new JsoupAsyncTask();
+        //execute task
+        task.execute();
     }
 
     String convertArrayToJson(String roomId, String[] str) {
@@ -65,6 +83,7 @@ public class CreateRoomActivity extends AppCompatActivity {
         }
         return null;
     }
+
 
     /*
     * This function checks if the editText fields are completed or not.
@@ -85,5 +104,41 @@ public class CreateRoomActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private class JsoupAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                htmlDoc = Jsoup.connect(htmlURL).get();
+                Elements monsterList = htmlDoc.select("a[href^=monster.asp?n]");
+                Log.d("test", String.valueOf(monsterList.size()));
+
+                for(Element itr : monsterList) {
+                    String test = itr.html();
+                    //Log.d("test", test);
+                    Log.d("title", itr.select("img").attr("title"));
+                    Log.d("png", itr.select("img").attr("abs:src"));
+//                    Log.d("testsrc", itr.attr("src"));
+//                    Log.d("testtitle", itr.attr("title"));
+//                    Log.d("testtext", itr.text());
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+        }
     }
 }

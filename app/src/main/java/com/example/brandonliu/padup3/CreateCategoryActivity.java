@@ -56,13 +56,13 @@ public class CreateCategoryActivity extends AppCompatActivity {
                 htmlDoc = Jsoup.connect(htmlURL).get();
 
                 //grab all elements in the table. Includes category, dungeon, and a few misc lines.
-                Elements test = htmlDoc.select("table#tabledrop");
+                Elements table = htmlDoc.select("table#tabledrop");
                 //initialize dungeon list
                 dungeonList = new ArrayList<Category>();
                 //start at negative 1. Note, we always start at a new category.
                 int counter = -1;
                 //iterates through elements and parses according to category or dungeon.
-                for(Element row : test.select("tr")) {
+                for(Element row : table.select("tr")) {
                     String temp = row.text();
                     int len = temp.length();
                     //special case, we want to skip this line.
