@@ -123,8 +123,9 @@ public class CreateRoomActivity extends AppCompatActivity {
                 for(Element itr : monsterList) {
                     String test = itr.html();
                     //Log.d("test", test);
+                    //Log.d("test", test);
                     Log.d("title", itr.select("img").attr("title"));
-                    Log.d("png", itr.select("img").attr("abs:src"));
+                    Log.d("png", itr.select("img").attr("abs:data-original"));
 //                    Log.d("testsrc", itr.attr("src"));
 //                    Log.d("testtitle", itr.attr("title"));
 //                    Log.d("testtext", itr.text());
