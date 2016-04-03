@@ -9,6 +9,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,6 +37,8 @@ public class CreateRoomActivity extends AppCompatActivity {
     private String htmlURL = "http://www.puzzledragonx.com/en/monsterbook.asp";
     private ArrayList<String> monsters;
     private Document htmlDoc;
+
+    private static final String[] test = {"Verdandi", "Ares", "Sonia", "test", "Verdoondi"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,10 @@ public class CreateRoomActivity extends AppCompatActivity {
         JsoupAsyncTask task = new JsoupAsyncTask();
         //execute task
         task.execute();
+
+        AutoCompleteTextView autoText = (AutoCompleteTextView)findViewById(R.id.test);
+        ArrayAdapter<String> autoAdapter = new ArrayAdapter<String>(this, R.layout.autocomplete_layout, test);
+        autoText.setAdapter(autoAdapter);
     }
 
     String convertArrayToJson(String roomId, String[] str) {
@@ -121,14 +129,8 @@ public class CreateRoomActivity extends AppCompatActivity {
                 Log.d("test", String.valueOf(monsterList.size()));
 
                 for(Element itr : monsterList) {
-                    String test = itr.html();
-                    //Log.d("test", test);
-                    //Log.d("test", test);
                     Log.d("title", itr.select("img").attr("title"));
                     Log.d("png", itr.select("img").attr("abs:data-original"));
-//                    Log.d("testsrc", itr.attr("src"));
-//                    Log.d("testtitle", itr.attr("title"));
-//                    Log.d("testtext", itr.text());
                 }
             }
             catch (IOException e) {
