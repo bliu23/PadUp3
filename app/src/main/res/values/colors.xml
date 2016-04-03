@@ -8,4 +8,6 @@
     <color name="backgroundColor">#FFFBC7</color>
     <color name="leaderTextField">#D2A679</color>
     <color name="subTextField">#D2A679</color>
+    <color name="autoCompleteDivider">#734D26</color>
+
 </resources>

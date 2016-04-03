@@ -14,7 +14,7 @@
         android:id="@+id/roomId"
         android:layout_width="128dp"
         android:layout_height="wrap_content"
-        android:inputType="phone"
+        android:inputType="number"
         android:ems="14"
         android:maxLength="@integer/maxchars"
         android:layout_marginTop="62dp"

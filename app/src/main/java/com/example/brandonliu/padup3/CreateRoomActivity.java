@@ -35,20 +35,30 @@ public class CreateRoomActivity extends AppCompatActivity {
     private String category;
 
     private String htmlURL = "http://www.puzzledragonx.com/en/monsterbook.asp";
-    private ArrayList<String> monsters;
     private Document htmlDoc;
 
-    private static final String[] test = {"Verdandi", "Ares", "Sonia", "test", "Verdoondi"};
+    private ArrayList<String> monsterImgs;
+    private ArrayList<String> monsterNames;
+    private ArrayAdapter<String> autoAdapter;
+    private AutoCompleteTextView autoText;
+
+    private static final String[] test = {"Verdandi", "Ares", "Sonia", "test", "Verdoondi", "verdaaaandi", "Verdverd", "VerDanDi"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room);
+
         dungeon = getIntent().getStringExtra("dungeon");
         category = getIntent().getStringExtra("category");
+
+        monsterImgs = new ArrayList<String>();
+        monsterNames = new ArrayList<String>();
+
         button = (Button)findViewById(R.id.requestButton);
         editRoomId = (EditText)findViewById(R.id.roomId);
         editMonsters = new EditText[6];
+        autoText = (AutoCompleteTextView)findViewById(R.id.test);
         //set edit text fields.
         for(int i = 0; i < 6; i++) {
             editMonsters[i] = (EditText)findViewById(R.id.leaderText + i);
@@ -70,9 +80,7 @@ public class CreateRoomActivity extends AppCompatActivity {
         //execute task
         task.execute();
 
-        AutoCompleteTextView autoText = (AutoCompleteTextView)findViewById(R.id.test);
-        ArrayAdapter<String> autoAdapter = new ArrayAdapter<String>(this, R.layout.autocomplete_layout, test);
-        autoText.setAdapter(autoAdapter);
+        autoAdapter = new ArrayAdapter<String>(this, R.layout.autocomplete_layout, R.id.textView, monsterNames);
     }
 
     String convertArrayToJson(String roomId, String[] str) {
@@ -129,9 +137,10 @@ public class CreateRoomActivity extends AppCompatActivity {
                 Log.d("test", String.valueOf(monsterList.size()));
 
                 for(Element itr : monsterList) {
-                    Log.d("title", itr.select("img").attr("title"));
-                    Log.d("png", itr.select("img").attr("abs:data-original"));
+                    monsterImgs.add(itr.select("img").attr("abs:data-original"));
+                    monsterNames.add(itr.select("img").attr("title"));
                 }
+                Log.d("sizebefore", String.valueOf(monsterNames.size()));
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -141,6 +150,7 @@ public class CreateRoomActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
+            autoText.setAdapter(autoAdapter);
 
         }
     }
