@@ -21,15 +21,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class CreateRoomActivity extends AppCompatActivity {
 
+    public static final int MONSTERS_PER_TEAM = 6;
+
     private EditText editRoomId;
-    private EditText[] editMonsters;
+    private AutoCompleteTextView[] selectMonsters;
     private Button button;
     private String dungeon;
     private String category;
@@ -40,7 +40,7 @@ public class CreateRoomActivity extends AppCompatActivity {
     private ArrayList<String> monsterImgs;
     private ArrayList<String> monsterNames;
     private ArrayAdapter<String> autoAdapter;
-    private AutoCompleteTextView autoText;
+    String[] monsterInputs;
 
     private static final String[] test = {"Verdandi", "Ares", "Sonia", "test", "Verdoondi", "verdaaaandi", "Verdverd", "VerDanDi"};
 
@@ -57,18 +57,17 @@ public class CreateRoomActivity extends AppCompatActivity {
 
         button = (Button)findViewById(R.id.requestButton);
         editRoomId = (EditText)findViewById(R.id.roomId);
-        editMonsters = new EditText[6];
-        autoText = (AutoCompleteTextView)findViewById(R.id.test);
+        selectMonsters = new AutoCompleteTextView[MONSTERS_PER_TEAM];
         //set edit text fields.
-        for(int i = 0; i < 6; i++) {
-            editMonsters[i] = (EditText)findViewById(R.id.leaderText + i);
+        for(int i = 0; i < MONSTERS_PER_TEAM; i++) {
+            selectMonsters[i] = (AutoCompleteTextView)findViewById(R.id.leaderText + i);
         }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String roomId = editRoomId.getText().toString();
-                String[] monsterInputs = new String[6];
+                monsterInputs = new String[MONSTERS_PER_TEAM];
                 if(filled()) {
                     String temp = convertArrayToJson(roomId, monsterInputs);
                     Log.d("json", temp);
@@ -92,6 +91,8 @@ public class CreateRoomActivity extends AppCompatActivity {
             for(int i = 0; i < str.length; i++) {
                 String temp = "monster" + String.valueOf(i);
                 obj.put(temp, str[i]);
+                Log.d("objputtemp", temp);
+                Log.d("objputmonster", str[i]);
             }
             return obj.toString();
         } catch (JSONException e) {
@@ -106,12 +107,13 @@ public class CreateRoomActivity extends AppCompatActivity {
     * */
     private boolean filled() {
         String roomId = editRoomId.getText().toString();
-        String[] monsterInputs = new String[6];
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < MONSTERS_PER_TEAM; i++) {
             //get input fields
-            monsterInputs[i] = editMonsters[i].getText().toString();
+            monsterInputs[i] = selectMonsters[i].getText().toString();
+            Log.d("fill", monsterInputs[i]);
             //if an input field is empty, it's not filled.
             if(monsterInputs[i].equals("")) {
+                Log.d("fill", "empty");
                 return false;
             }
         }
@@ -150,7 +152,9 @@ public class CreateRoomActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            autoText.setAdapter(autoAdapter);
+            for(int i = 0; i < MONSTERS_PER_TEAM; i++) {
+                selectMonsters[i].setAdapter(autoAdapter);
+            }
 
         }
     }
