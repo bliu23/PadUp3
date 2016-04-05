@@ -50,9 +50,9 @@ public class FindCategoryActivity extends AppCompatActivity {
 
     }
     private void prepareTestData() {
-        availableContent.add(new Category("testcat1"));
-        availableContent.add(new Category("testcat2"));
-        availableContent.add(new Category("last test cat"));
+        availableContent.add(new Category("Category 1"));
+        availableContent.add(new Category("Category 2"));
+        availableContent.add(new Category("Category 3"));
 
         availableContent.get(0).addDungeon("Cat 1 Dungeon 1");
         availableContent.get(0).addDungeon("Cat 1 Dungeon 2");

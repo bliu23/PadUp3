@@ -22,7 +22,8 @@
         <activity android:name=".FindCategoryActivity" />
         <activity android:name=".CreateDungeonActivity" />
         <activity android:name=".CreateRoomActivity" />
-        <activity android:name=".FindDungeonActivity"></activity>
+        <activity android:name=".FindDungeonActivity" />
+        <activity android:name=".DisplayRoomActivity"></activity>
     </application>
 
 </manifest>

@@ -38,11 +38,9 @@ public class FindDungeonActivity extends AppCompatActivity {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
                 String dungeonClicked = dungeonList.get(position);
                 Log.d("cat clicked", dungeonClicked);
-//                Intent intent = new Intent(FindDungeonActivity.this, FindDungeonActivity.class);
 
-                //probably want to send the entire category in this case.
-                //intent.putExtra("categoryobj", availableContent.get(position));
-                //startActivity(intent);
+                //Send the dungeonClicked to the next activity. In that activity, make an HTTP POST
+                //request to retrieve a list of rooms for that specific dungeon.
             }
         });
     }

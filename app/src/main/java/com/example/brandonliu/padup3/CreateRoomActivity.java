@@ -40,7 +40,10 @@ public class CreateRoomActivity extends AppCompatActivity {
     private ArrayList<String> monsterImgs;
     private ArrayList<String> monsterNames;
     private ArrayAdapter<String> autoAdapter;
-    String[] monsterInputs;
+
+    private String[] monsterInputs;
+    private String[] imgInputs;
+    private int[] inputIndex;
 
     private static final String[] test = {"Verdandi", "Ares", "Sonia", "test", "Verdoondi", "verdaaaandi", "Verdverd", "VerDanDi"};
 
@@ -58,18 +61,38 @@ public class CreateRoomActivity extends AppCompatActivity {
         button = (Button)findViewById(R.id.requestButton);
         editRoomId = (EditText)findViewById(R.id.roomId);
         selectMonsters = new AutoCompleteTextView[MONSTERS_PER_TEAM];
+
+        imgInputs = new String[MONSTERS_PER_TEAM];
+        monsterInputs = new String[MONSTERS_PER_TEAM];
+
         //set edit text fields.
         for(int i = 0; i < MONSTERS_PER_TEAM; i++) {
+            //set autocompletetextview
             selectMonsters[i] = (AutoCompleteTextView)findViewById(R.id.leaderText + i);
+            final int k = i;
+            //when selecting from autocompletetextview, grabs the image of the monster.
+            selectMonsters[i].setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
+                    //index is the index of the entire arrayList of monsters/images. NOT index in the autocomplete choice
+                    int index = monsterNames.indexOf(selectMonsters[k].getText().toString());
+                    imgInputs[k] = monsterImgs.get(index);
+                }
+            });
         }
-
+        //on click, checks to see if all boxes are filled. If so,
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String roomId = editRoomId.getText().toString();
-                monsterInputs = new String[MONSTERS_PER_TEAM];
                 if(filled()) {
-                    String temp = convertArrayToJson(roomId, monsterInputs);
+                    for(int i = 0; i < MONSTERS_PER_TEAM; i++) {
+                        monsterInputs[i] = selectMonsters[i].getText().toString();
+                        if(imgInputs[i] == null) {
+                            imgInputs[i] = "--";
+                        }
+                    }
+                    String temp = convertArrayToJson(roomId, imgInputs, monsterInputs);
                     Log.d("json", temp);
                 }
             }
@@ -82,17 +105,22 @@ public class CreateRoomActivity extends AppCompatActivity {
         autoAdapter = new ArrayAdapter<String>(this, R.layout.autocomplete_layout, R.id.textView, monsterNames);
     }
 
-    String convertArrayToJson(String roomId, String[] str) {
+    /*
+    * room id, category, dungeon
+    * monster0 img0   monster1 img1   -> monster n img n
+    * if there is a custom input, the img will be --.
+    * */
+    String convertArrayToJson(String roomId, String[] imgs, String[] names) {
         JSONObject obj = new JSONObject();
         try {
             obj.put("roomId", roomId);
             obj.put("category", category);
             obj.put("dungeon", dungeon);
-            for(int i = 0; i < str.length; i++) {
-                String temp = "monster" + String.valueOf(i);
-                obj.put(temp, str[i]);
-                Log.d("objputtemp", temp);
-                Log.d("objputmonster", str[i]);
+            for(int i = 0; i < names.length; i++) {
+                String tempname = "monster" + String.valueOf(i);
+                String tempimg = "img" + String.valueOf(i);
+                obj.put(tempname, names[i]);
+                obj.put(tempimg, imgs[i]);
             }
             return obj.toString();
         } catch (JSONException e) {
@@ -108,11 +136,8 @@ public class CreateRoomActivity extends AppCompatActivity {
     private boolean filled() {
         String roomId = editRoomId.getText().toString();
         for(int i = 0; i < MONSTERS_PER_TEAM; i++) {
-            //get input fields
-            monsterInputs[i] = selectMonsters[i].getText().toString();
-            Log.d("fill", monsterInputs[i]);
             //if an input field is empty, it's not filled.
-            if(monsterInputs[i].equals("")) {
+            if(selectMonsters[i].getText().toString().equals("")) {
                 Log.d("fill", "empty");
                 return false;
             }
