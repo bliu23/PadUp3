@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -43,25 +45,37 @@ public class CreateRoomActivity extends AppCompatActivity {
 
     private String[] monsterInputs;
     private String[] imgInputs;
-    private int[] inputIndex;
+    private Input input;
 
-    private static final String[] test = {"Verdandi", "Ares", "Sonia", "test", "Verdoondi", "verdaaaandi", "Verdverd", "VerDanDi"};
+
+    private Firebase ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room);
 
-        dungeon = getIntent().getStringExtra("dungeon");
-        category = getIntent().getStringExtra("category");
+        //firebase setup
+        Firebase.setAndroidContext(this);
+        ref = new Firebase("https://radiant-inferno-9080.firebaseio.com/");
 
+        //get intent
+        category = getIntent().getStringExtra("category");
+        dungeon = getIntent().getStringExtra("dungeon");
+
+        //declare input
+        input = new Input(category, dungeon);
+
+        //declare arraylists used for img and names
         monsterImgs = new ArrayList<String>();
         monsterNames = new ArrayList<String>();
 
+        //display vars
         button = (Button)findViewById(R.id.requestButton);
         editRoomId = (EditText)findViewById(R.id.roomId);
         selectMonsters = new AutoCompleteTextView[MONSTERS_PER_TEAM];
 
+        //inputs we get from filled out fields
         imgInputs = new String[MONSTERS_PER_TEAM];
         monsterInputs = new String[MONSTERS_PER_TEAM];
 
@@ -92,8 +106,15 @@ public class CreateRoomActivity extends AppCompatActivity {
                             imgInputs[i] = "--";
                         }
                     }
-                    String temp = convertArrayToJson(roomId, imgInputs, monsterInputs);
-                    Log.d("json", temp);
+                    input.setRoomId(roomId);
+                    input.setImgs(imgInputs);
+                    input.setMonsters(monsterInputs);
+                    /*
+                    String jString = convertArrayToJson(roomId, imgInputs, monsterInputs);
+                    Log.d("json", jString);*/
+
+                    Firebase fieldRef = ref.child("inputs");
+                    fieldRef.push().setValue(input);
                 }
             }
         });

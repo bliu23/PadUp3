@@ -1,12 +1,20 @@
 package com.example.brandonliu.padup3;
 
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 
 import java.util.ArrayList;
 
@@ -21,6 +29,31 @@ public class FindCategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_category);
+        Firebase.setAndroidContext(this);
+
+        //firebase
+        Firebase ref = new Firebase("https://radiant-inferno-9080.firebaseio.com/inputs");
+
+        //Query queryRef = ref.orderByChild("dungeonName");
+        ref.addChildEventListener(new ChildEventListener() {
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousKey) {
+                Input facts = dataSnapshot.getValue(Input.class);
+                facts.print();
+            }
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Input facts = dataSnapshot.getValue(Input.class);
+                Log.d(dataSnapshot.getKey(), facts.getDungeonName());
+            }
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Input facts = dataSnapshot.getValue(Input.class);
+                Log.d(dataSnapshot.getKey(), facts.getDungeonName());
+            }
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Input facts = dataSnapshot.getValue(Input.class);
+                Log.d(dataSnapshot.getKey(), facts.getDungeonName());
+            }
+            public void onCancelled(FirebaseError firebaseError) { }
+        });
 
         //HTTPget arrayList of categories
         availableContent = new ArrayList<Category>();
