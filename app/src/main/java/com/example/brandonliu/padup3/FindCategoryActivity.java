@@ -38,7 +38,7 @@ public class FindCategoryActivity extends AppCompatActivity {
         ref.addChildEventListener(new ChildEventListener() {
             public void onChildAdded(DataSnapshot dataSnapshot, String previousKey) {
                 Input facts = dataSnapshot.getValue(Input.class);
-                facts.print();
+                facts.print(); 
             }
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Input facts = dataSnapshot.getValue(Input.class);
