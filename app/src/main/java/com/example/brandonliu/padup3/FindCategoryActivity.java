@@ -15,6 +15,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -33,78 +34,110 @@ public class FindCategoryActivity extends AppCompatActivity {
 
         //firebase
         Firebase ref = new Firebase("https://radiant-inferno-9080.firebaseio.com/inputs");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
 
-        //Query queryRef = ref.orderByChild("dungeonName");
-        ref.addChildEventListener(new ChildEventListener() {
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousKey) {
-                Input facts = dataSnapshot.getValue(Input.class);
-                facts.print(); 
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                categoryList.clear(); // Clear list before updating
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    String cat = (String) child.child("category").getValue();
+                    //add if doesnt contain
+                    if(!categoryList.contains(cat)) {
+                        categoryList.add(cat);
+                    }
+                    Log.d("categories", cat);
+                }
+
+                adapter = new ArrayAdapter<String>(FindCategoryActivity.this, R.layout.list_layout, categoryList);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView parent, View v, int position, long id) {
+                        String categoryClicked = categoryList.get(position);
+                        Intent intent = new Intent(FindCategoryActivity.this, FindDungeonActivity.class);
+                        intent.putExtra("category", categoryClicked);
+                        Log.d("sending category", categoryClicked);
+                        // We will probably want to send the entire category in this case.
+//                        intent.putExtra("categoryobj", availableContent.get(position));
+                        startActivity(intent);
+                    }
+                });
             }
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Input facts = dataSnapshot.getValue(Input.class);
-                Log.d(dataSnapshot.getKey(), facts.getDungeonName());
-            }
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Input facts = dataSnapshot.getValue(Input.class);
-                Log.d(dataSnapshot.getKey(), facts.getDungeonName());
-            }
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Input facts = dataSnapshot.getValue(Input.class);
-                Log.d(dataSnapshot.getKey(), facts.getDungeonName());
-            }
-            public void onCancelled(FirebaseError firebaseError) { }
+            public void onCancelled(FirebaseError error) { }
         });
+
+
+                //Query queryRef = ref.orderByChild("dungeonName");
+//        ref.addChildEventListener(new ChildEventListener() {
+//            public void onChildAdded(DataSnapshot dataSnapshot, String previousKey) {
+//                Input in = dataSnapshot.getValue(Input.class);
+//                Log.d("category", in.getCategory());
+//                categoryList.add(in.getCategory());
+//            }
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//                Input facts = dataSnapshot.getValue(Input.class);
+//                Log.d(dataSnapshot.getKey(), facts.getDungeonName());
+//            }
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//                Input facts = dataSnapshot.getValue(Input.class);
+//                Log.d(dataSnapshot.getKey(), facts.getDungeonName());
+//            }
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//                Input facts = dataSnapshot.getValue(Input.class);
+//                Log.d(dataSnapshot.getKey(), facts.getDungeonName());
+//            }
+//            public void onCancelled(FirebaseError firebaseError) { }
+//        });
 
         //HTTPget arrayList of categories
         availableContent = new ArrayList<Category>();
         categoryList = new ArrayList<String>();
         listView = (ListView)findViewById(R.id.listView);
-        prepareTestData();
+        //prepareTestData();
 
 
         //display categories
-        adapter = new ArrayAdapter<String>(this, R.layout.list_layout, categoryList);
-        listView.setAdapter(adapter);
+        //adapter = new ArrayAdapter<String>(this, R.layout.list_layout, categoryList);
+        //listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView parent, View v, int position, long id) {
-                String categoryClicked = categoryList.get(position);
-                Intent intent = new Intent(FindCategoryActivity.this, FindDungeonActivity.class);
-
-                // We will probably want to send the entire category in this case.
-                intent.putExtra("categoryobj", availableContent.get(position));
-                startActivity(intent);
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            public void onItemClick(AdapterView parent, View v, int position, long id) {
+//                String categoryClicked = categoryList.get(position);
+//                Intent intent = new Intent(FindCategoryActivity.this, FindDungeonActivity.class);
+//
+//                // We will probably want to send the entire category in this case.
+//                intent.putExtra("categoryobj", availableContent.get(position));
+//                startActivity(intent);
+//            }
+//        });
 
         //display dungeons in category available
 
         //display room numbers + teams + stuff available.
 
     }
-    private void prepareTestData() {
-        availableContent.add(new Category("Category 1"));
-        availableContent.add(new Category("Category 2"));
-        availableContent.add(new Category("Category 3"));
-
-        availableContent.get(0).addDungeon("Cat 1 Dungeon 1");
-        availableContent.get(0).addDungeon("Cat 1 Dungeon 2");
-        availableContent.get(0).addDungeon("Cat 1 Dungeon 3");
-        availableContent.get(0).addDungeon("Cat 1 Dungeon 4");
-
-        availableContent.get(1).addDungeon("Cat 2 Dungeon 1");
-        availableContent.get(1).addDungeon("Cat 2 Dungeon 2");
-        availableContent.get(1).addDungeon("Cat 2 Dungeon 3");
-
-        availableContent.get(2).addDungeon("Cat 3 Dungeon 1");
-        availableContent.get(2).addDungeon("Cat 3 Dungeon 2");
-        availableContent.get(2).addDungeon("Cat 3 Dungeon 3");
-        availableContent.get(2).addDungeon("Cat 3 Dungeon 4");
-        availableContent.get(2).addDungeon("Cat 3 Dungeon 5");
-        availableContent.get(2).addDungeon("Cat 3 Dungeon 6");
-
-        categoryList.add(availableContent.get(0).getCat());
-        categoryList.add(availableContent.get(1).getCat());
-        categoryList.add(availableContent.get(2).getCat());
-    }
+//    private void prepareTestData() {
+//        availableContent.add(new Category("Category 1"));
+//        availableContent.add(new Category("Category 2"));
+//        availableContent.add(new Category("Category 3"));
+//
+//        availableContent.get(0).addDungeon("Cat 1 Dungeon 1");
+//        availableContent.get(0).addDungeon("Cat 1 Dungeon 2");
+//        availableContent.get(0).addDungeon("Cat 1 Dungeon 3");
+//        availableContent.get(0).addDungeon("Cat 1 Dungeon 4");
+//
+//        availableContent.get(1).addDungeon("Cat 2 Dungeon 1");
+//        availableContent.get(1).addDungeon("Cat 2 Dungeon 2");
+//        availableContent.get(1).addDungeon("Cat 2 Dungeon 3");
+//
+//        availableContent.get(2).addDungeon("Cat 3 Dungeon 1");
+//        availableContent.get(2).addDungeon("Cat 3 Dungeon 2");
+//        availableContent.get(2).addDungeon("Cat 3 Dungeon 3");
+//        availableContent.get(2).addDungeon("Cat 3 Dungeon 4");
+//        availableContent.get(2).addDungeon("Cat 3 Dungeon 5");
+//        availableContent.get(2).addDungeon("Cat 3 Dungeon 6");
+//
+//        categoryList.add(availableContent.get(0).getCat());
+//        categoryList.add(availableContent.get(1).getCat());
+//        categoryList.add(availableContent.get(2).getCat());
+//    }
 }
