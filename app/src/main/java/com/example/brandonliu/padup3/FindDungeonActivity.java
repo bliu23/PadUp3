@@ -43,6 +43,7 @@ public class FindDungeonActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dungeonList.clear(); // Clear list before updating
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    //get all dungeons of that specific category clicked earlier
                     if(((String)child.child("category").getValue()).equals(category)) {
                         String addDun = (String) child.child("dungeonName").getValue();
                         //only add if not present
