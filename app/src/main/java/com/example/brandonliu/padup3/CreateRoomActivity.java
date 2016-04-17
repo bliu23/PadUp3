@@ -107,8 +107,8 @@ public class CreateRoomActivity extends AppCompatActivity {
                         }
                     }
                     input.setRoomId(roomId);
-                    input.setImgs(imgInputs);
-                    input.setMonsters(monsterInputs);
+                    input.setImgs(convertStringArrayToArrayList(imgInputs));
+                    input.setMonsters(convertStringArrayToArrayList(monsterInputs));
                     /*
                     String jString = convertArrayToJson(roomId, imgInputs, monsterInputs);
                     Log.d("json", jString);*/
@@ -148,6 +148,14 @@ public class CreateRoomActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private ArrayList<String> convertStringArrayToArrayList(String[]str) {
+        ArrayList<String> temp = new ArrayList<String>();
+        for(int i = 0; i < str.length; i++) {
+            temp.add(str[i]);
+        }
+        return temp;
     }
 
 

@@ -5,4 +5,5 @@
     <string name="subName">Sub</string>
     <string name="requestedLeaderName">Requested Leader</string>
     <string name="placeRequest">Place Request!</string>
+    <string name="image">Image thumbnail</string>
 </resources>
