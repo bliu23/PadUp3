@@ -41,6 +41,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         ViewHolder holder = null;
@@ -61,42 +62,37 @@ public class ImageAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
+
         Bitmap[] imageBitmaps = new Bitmap[MONSTERS_DISPLAYED];
         for(int i = 0; i < MONSTERS_DISPLAYED; i++) {
             imageBitmaps[i] = null;
         }
-
         holder.textView.setText("Room ID: " + '\n' + inputList.get(position).getRoomId());
         //load images directly
-        for (int i = 0; i < MONSTERS_DISPLAYED; i++) {
-            try {
-                URL imageURL = new URL(inputList.get(position).getImgs().get(i));
-                Log.d("testurl", inputList.get(position).getImgs().get(i));
-                imageBitmaps[i] = BitmapFactory.decodeStream(imageURL.openStream());
-                holder.imageViews[i].setImageBitmap(imageBitmaps[i]);
-            } catch (IOException e) {
-                // TODO: handle exception
-                Log.e("error", "Downloading Image Failed");
-                //holder.imageViews[i].setImageResource(R.drawable.postthumb_loading);
+//        for (int i = 0; i < MONSTERS_DISPLAYED; i++) {
+//            try {
+//                URL imageURL = new URL(inputList.get(position).getImgs().get(i));
+//                Log.d("testurl", inputList.get(position).getImgs().get(i));
+//                imageBitmaps[i] = BitmapFactory.decodeStream(imageURL.openStream());
+//                holder.imageViews[i].setImageBitmap(imageBitmaps[i]);
+//            } catch (IOException e) {
+//                // TODO: handle exception
+//                Log.e("error", "Downloading Image Failed");
+//            }
+//        }
 
+        new DownloadImageTask((ImageView)convertView.findViewById(R.id.imageView1))
+                .execute(inputList.get(position).getImgs().get(0));
+        new DownloadImageTask((ImageView)convertView.findViewById(R.id.imageView2))
+                .execute(inputList.get(position).getImgs().get(1));
+        new DownloadImageTask((ImageView)convertView.findViewById(R.id.imageView3))
+                .execute(inputList.get(position).getImgs().get(2));
+        new DownloadImageTask((ImageView)convertView.findViewById(R.id.imageView4))
+                .execute(inputList.get(position).getImgs().get(3));
+        new DownloadImageTask((ImageView)convertView.findViewById(R.id.imageView5))
+                .execute(inputList.get(position).getImgs().get(4));
 
-            }
-        }
         return convertView;
-    }
-    @Override
-    public int getCount() {
-        return inputList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return inputList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return inputList.indexOf(getItem(position));
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
@@ -123,5 +119,25 @@ public class ImageAdapter extends BaseAdapter {
             bmImage.setImageBitmap(result);
         }
     }
+
+
+    @Override
+    public int getCount() {
+        return inputList.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return inputList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return inputList.indexOf(getItem(position));
+    }
+
+
+
+
 
 }
