@@ -13,6 +13,7 @@ public class Input implements Parcelable {
     private String category;
     private String dungeonName;
     private String roomId;
+    private double timestamp;
     private ArrayList<String> monsters;
     private ArrayList<String> imgs;
 
@@ -31,16 +32,13 @@ public class Input implements Parcelable {
     public String getRoomId() { return roomId; }
     public ArrayList<String> getMonsters() { return monsters; }
     public ArrayList<String> getImgs() { return imgs; }
+    public double getTimestamp() { return timestamp; }
 
     //set methods
     public void setRoomId(String id) { roomId = id; }
     public void setMonsters(ArrayList<String> mon) { monsters = mon; }
     public void setImgs(ArrayList<String> im) { imgs = im; }
-
-    public void printInitial() {
-        Log.d("category", category);
-        Log.d("dungeon", dungeonName);
-    }
+    public void setTimestamp(double ts) { timestamp = ts; }
 
     public void print() {
         Log.d("category", category);
@@ -56,6 +54,8 @@ public class Input implements Parcelable {
         category = in.readString();
         dungeonName = in.readString();
         roomId = in.readString();
+        timestamp = in.readDouble();
+
         if (in.readByte() == 0x01) {
             monsters = new ArrayList<String>();
             in.readList(monsters, String.class.getClassLoader());
@@ -80,6 +80,7 @@ public class Input implements Parcelable {
         dest.writeString(category);
         dest.writeString(dungeonName);
         dest.writeString(roomId);
+        dest.writeDouble(timestamp);
         if (monsters == null) {
             dest.writeByte((byte) (0x00));
         } else {

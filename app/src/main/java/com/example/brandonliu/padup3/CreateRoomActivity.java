@@ -114,6 +114,8 @@ public class CreateRoomActivity extends AppCompatActivity {
                     Log.d("json", jString);*/
 
                     Firebase fieldRef = ref.child("inputs");
+                    //set timestamp
+                    input.setTimestamp((double)System.currentTimeMillis());
                     fieldRef.push().setValue(input);
                 }
             }

@@ -36,10 +36,6 @@ public class DisplayRoomActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
 
         roomList = getIntent().getParcelableArrayListExtra("input");
-        for(int i = 0; i < roomList.size(); i++) {
-            Log.d("roomList", String.valueOf(i));
-            roomList.get(i).print();
-        }
 
         listView = (ListView) findViewById(R.id.listView);
         rooms = new ArrayList<String>();
@@ -66,23 +62,7 @@ public class DisplayRoomActivity extends AppCompatActivity {
                         Log.d("categories", rooms.get(rooms.size() - 1));
                     }//endif
                 }
-
-//                adapter = new ArrayAdapter<String>(DisplayRoomActivity.this, R.layout.list_layout, rooms);
-//                listView.setAdapter(adapter);
-
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        public void onItemClick(AdapterView parent, View v, int position, long id) {
-                            String roomId = rooms.get(position);
-                            roomList.get(position).print();
-                            Intent intent = new Intent(DisplayRoomActivity.this, DisplayRoomActivity.class);
-                            intent.putExtra("roomId", roomId);
-                            Log.d("roomId", roomId);
-                            // We will probably want to send the entire category in this case.
-//                        intent.putExtra("categoryobj", availableContent.get(position));
-                            //startActivity(intent);
-                        }
-                    });
-                }
+            }
 
             public void onCancelled(FirebaseError error) {
             }
