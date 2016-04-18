@@ -22,6 +22,7 @@ public class CreateDungeonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_dungeon);
 
+        //get the category that was sent over
         Intent intent = getIntent();
         receivedCategory = intent.getExtras().getParcelable("cat");
 

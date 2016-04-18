@@ -36,6 +36,7 @@ public class CreateRoomActivity extends AppCompatActivity {
     private String dungeon;
     private String category;
 
+    private String noImage = "https://upload.wikimedia.org/wikipedia/en/a/a6/Red_Battle_X.png";
     private String htmlURL = "http://www.puzzledragonx.com/en/monsterbook.asp";
     private Document htmlDoc;
 
@@ -103,7 +104,7 @@ public class CreateRoomActivity extends AppCompatActivity {
                     for(int i = 0; i < MONSTERS_PER_TEAM; i++) {
                         monsterInputs[i] = selectMonsters[i].getText().toString();
                         if(imgInputs[i] == null) {
-                            imgInputs[i] = "--";
+                            imgInputs[i] = noImage;
                         }
                     }
                     input.setRoomId(roomId);
@@ -169,7 +170,6 @@ public class CreateRoomActivity extends AppCompatActivity {
         for(int i = 0; i < MONSTERS_PER_TEAM; i++) {
             //if an input field is empty, it's not filled.
             if(selectMonsters[i].getText().toString().equals("")) {
-                Log.d("fill", "empty");
                 return false;
             }
         }
@@ -192,13 +192,11 @@ public class CreateRoomActivity extends AppCompatActivity {
             try {
                 htmlDoc = Jsoup.connect(htmlURL).get();
                 Elements monsterList = htmlDoc.select("a[href^=monster.asp?n]");
-                Log.d("test", String.valueOf(monsterList.size()));
 
                 for(Element itr : monsterList) {
                     monsterImgs.add(itr.select("img").attr("abs:data-original"));
                     monsterNames.add(itr.select("img").attr("title"));
                 }
-                Log.d("sizebefore", String.valueOf(monsterNames.size()));
             }
             catch (IOException e) {
                 e.printStackTrace();

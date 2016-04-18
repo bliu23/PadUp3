@@ -59,7 +59,7 @@ public class DisplayRoomActivity extends AppCompatActivity {
                         //add if doesnt contain
                         rooms.add("Room ID: " + info.getRoomId());
                         roomList.add(info);
-                        Log.d("categories", rooms.get(rooms.size() - 1));
+                        //Log.d("categories", rooms.get(rooms.size() - 1));
                     }//endif
                 }
             }

@@ -71,7 +71,6 @@ public class CreateCategoryActivity extends AppCompatActivity {
                     }
                     //hit the end. break
                     if(temp.equals("Remarks")) {
-                        Log.d("end", temp);
                         break;
                     }
                     //special case for challenge dungeon since it ends with numbers.
@@ -112,7 +111,6 @@ public class CreateCategoryActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView parent, View v, int position, long id) {
                     // Start your Activity according to the item just clicked.
                     Intent intent = new Intent(CreateCategoryActivity.this, CreateDungeonActivity.class);
-                    //intent.putExtra("dungeonCatID", position);
                     intent.putExtra("cat", dungeonList.get(position));
                     startActivity(intent);
                 }

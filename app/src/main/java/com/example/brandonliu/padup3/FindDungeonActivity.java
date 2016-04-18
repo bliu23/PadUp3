@@ -51,7 +51,7 @@ public class FindDungeonActivity extends AppCompatActivity {
                         if(!dungeonList.contains(addDun)) {
                             dungeonList.add(addDun);
                         }
-                        Log.d("dungeons", addDun);
+                        //Log.d("dungeons", addDun);
                     }
 
                 }
@@ -71,13 +71,13 @@ public class FindDungeonActivity extends AppCompatActivity {
                             }//endif
                         }
                         //testprint
-                        for(int i = 0; i < roomList.size(); i++) {
-                            roomList.get(i).print();
-                        }
+//                        for(int i = 0; i < roomList.size(); i++) {
+//                            roomList.get(i).print();
+//                        }
 
                         Intent intent = new Intent(FindDungeonActivity.this, DisplayRoomActivity.class);
                         intent.putExtra("input", roomList);
-                        Log.d("dungeonClicked", dungeonClicked);
+ //                       Log.d("dungeonClicked", dungeonClicked);
                         // We will probably want to send the entire category in this case.
 //                        intent.putExtra("categoryobj", availableContent.get(position));
                         startActivity(intent);
