@@ -118,6 +118,8 @@ public class CreateRoomActivity extends AppCompatActivity {
                     //set timestamp
                     input.setTimestamp((double)System.currentTimeMillis());
                     fieldRef.push().setValue(input);
+                    Toast.makeText(CreateRoomActivity.this, "Done!",
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
