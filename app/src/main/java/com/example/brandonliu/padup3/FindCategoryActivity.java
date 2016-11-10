@@ -26,7 +26,7 @@ public class FindCategoryActivity extends AppCompatActivity {
     private ArrayList<String> categoryList;
     private ArrayAdapter<String> adapter;               //adapter for listview
     private ListView listView;
-    public final static double TIME_TO_DELETE = 3.6*100000;
+    public final static double TIME_TO_DELETE = 3.6*1000000000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
